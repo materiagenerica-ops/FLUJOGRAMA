@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLUJOGRAMA TESIS FONOAUDIOLOGIA</title>
+    <!-- Fuentes de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Fondo ambiental cinematográfico -->
+    <div class="cinema-backdrop">
+        <div class="glow-orb glow-1"></div>
+        <div class="glow-orb glow-2"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Cabecera institucional -->
+        <header class="app-header no-print">
+            <div class="header-badge">Investigación Académica &bull; Fonoaudiología</div>
+            <h1>FLUJOGRAMA TESIS FONOAUDIOLOGIA</h1>
+            <p class="subtitle">Editor con persistencia en tiempo real (Cloud Firestore). Los cambios se guardan automáticamente.</p>
+            <div id="db-status" class="db-status syncing">Sincronizando con base de datos...</div>
+        </header>
+
+        <!-- Panel de Control y Edición Integral (Oculto en impresión) -->
+        <section class="control-panel no-print">
+            <div class="panel-header">
+                <h2><span class="icon">&#9881;</span> Panel de Edición Integral del Flujograma</h2>
+                <p>Modifica los textos, subtítulos y cantidades ($n$). Todo se actualiza de forma persistente.</p>
+            </div>
+
+            <div class="editor-grid">
+                <!-- Bloque 1: Identificación -->
+                <div class="editor-card">
+                    <h3>1. Identificación (Bases de datos)</h3>
+                    <label>Título del Bloque:</label>
+                    <input type="text" id="edit-title-f1" value="IDENTIFICACIÓN:">
+                    <label>Descripción:</label>
+                    <textarea id="edit-body-f1">Barrido exhaustivo en bases de datos</textarea>
+                    <label>Valor numérico ($n$):</label>
+                    <input type="text" id="edit-val-f1" value="n = 1,420">
+                </div>
+
+                <!-- Bloque 2: Tamizaje -->
+                <div class="editor-card">
+                    <h3>2. Tamizaje (Screening)</h3>
+                    <label>Título del Bloque:</label>
+                    <input type="text" id="edit-title-f2" value="TAMIZAJE (SCREENING):">
+                    <label>Descripción:</label>
+                    <textarea id="edit-body-f2">Limpieza de registros repetidos y lectura rápida de títulos/resúmenes</textarea>
+                    <label>Valor numérico ($n$):</label>
+                    <input type="text" id="edit-val-f2" value="n = 980">
+                </div>
+
+                <!-- Bloque 3: Registros Excluidos -->
+                <div class="editor-card">
+                    <h3>3. Registros Excluidos</h3>
+                    <label>Título del Bloque:</label>
+                    <input type="text" id="edit-title-f3" value="REGISTROS EXCLUIDOS">
+                    <label>Descripción:</label>
+                    <textarea id="edit-body-f3">Fuera de franja etaria o cuadro clínico</textarea>
+                    <label>Valor numérico ($n$):</label>
+                    <input type="text" id="edit-val-f3" value="n = 440">
+                </div>
+
+                <!-- Bloque 4: Elegibilidad -->
+                <div class="editor-card">
+                    <h3>4. Elegibilidad</h3>
+                    <label>Título del Bloque:</label>
+                    <input type="text" id="edit-title-f4" value="ELEGIBILIDAD:">
+                    <label>Descripción:</label>
+                    <textarea id="edit-body-f4">Análisis a texto completo de trabajos preseleccionados</textarea>
+                    <label>Valor numérico ($n$):</label>
+                    <input type="text" id="edit-val-f4" value="n = 310">
+                </div>
+
+                <!-- Bloque 5: Trabajos Excluidos -->
+                <div class="editor-card">
+                    <h3>5. Trabajos Excluidos</h3>
+                    <label>Título del Bloque:</label>
+                    <input type="text" id="edit-title-f5" value="TRABAJOS EXCLUIDOS">
+                    <label>Descripción:</label>
+                    <textarea id="edit-body-f5">No cumplen criterios estrictos</textarea>
+                    <label>Valor numérico ($n$):</label>
+                    <input type="text" id="edit-val-f5" value="n = 265">
+                </div>
+
+                <!-- Bloque 6: Inclusión Definitiva -->
+                <div class="editor-card">
+                    <h3>6. Inclusión Definitiva</h3>
+                    <label>Título del Bloque:</label>
+                    <input type="text" id="edit-title-f6" value="INCLUSIÓN DEFINITIVA:">
+                    <label>Descripción:</label>
+                    <textarea id="edit-body-f6">Conformación del corpus bibliográfico</textarea>
+                    <label>Valor numérico ($n$):</label>
+                    <input type="text" id="edit-val-f6" value="n = 45">
+                </div>
+
+                <!-- Bloque 7: Matriz de Extracción -->
+                <div class="editor-card full-width">
+                    <h3>7. Matriz de Extracción</h3>
+                    <label>Título del Bloque:</label>
+                    <input type="text" id="edit-title-f7" value="MATRIZ DE EXTRACCIÓN:">
+                    <label>Descripción / Contenido:</label>
+                    <textarea id="edit-body-f7">Cuadro síntesis (autor, año, país, propósito, diseño, conclusiones sobre acople deglución-respiración y tácticas fonoaudiológicas)</textarea>
+                </div>
+            </div>
+
+            <div class="panel-actions">
+                <button id="btn-generate" class="btn-primary">
+                    <span class="btn-icon">&#128196;</span> Generar Flujograma Académico / Imprimir PDF
+                </button>
+            </div>
+        </section>
+
+        <!-- Lienzo del Flujograma -->
+        <main class="flowchart-canvas" id="flowchart-output">
+            <div class="print-header-title">
+                <h2>FLUJOGRAMA TESIS FONOAUDIOLOGIA</h2>
+                <p>Diagrama de Flujo del Proceso de Selección y Extracción Bibliográfica (Basado en metodología PRISMA)</p>
+            </div>
+
+            <div class="flowchart-structure">
+                <!-- NIVEL 1 -->
+                <div class="flow-node main-node" data-node="f1">
+                    <div class="node-header" id="node-title-f1">IDENTIFICACIÓN:</div>
+                    <div class="node-body" id="node-body-f1">Barrido exhaustivo en bases de datos</div>
+                    <div class="node-metric" id="node-val-f1">(n = 1,420)</div>
+                </div>
+
+                <div class="flow-connector vertical"><div class="arrow-down"></div></div>
+
+                <!-- NIVEL 2 -->
+                <div class="split-row">
+                    <div class="flow-node main-node" data-node="f2">
+                        <div class="node-header" id="node-title-f2">TAMIZAJE (SCREENING):</div>
+                        <div class="node-body" id="node-body-f2">Limpieza de registros repetidos y lectura rápida de títulos/resúmenes</div>
+                        <div class="node-metric" id="node-val-f2">(n = 980)</div>
+                    </div>
+                    <div class="connector-horizontal-group">
+                        <div class="line-h"></div>
+                        <div class="arrow-right"></div>
+                    </div>
+                    <div class="flow-node side-node" data-node="f3">
+                        <div class="node-header" id="node-title-f3">REGISTROS EXCLUIDOS</div>
+                        <div class="node-body" id="node-body-f3">Fuera de franja etaria o cuadro clínico</div>
+                        <div class="node-metric" id="node-val-f3">(n = 440)</div>
+                    </div>
+                </div>
+
+                <div class="flow-connector vertical offset-left"><div class="arrow-down"></div></div>
+
+                <!-- NIVEL 3 -->
+                <div class="split-row">
+                    <div class="flow-node main-node" data-node="f4">
+                        <div class="node-header" id="node-title-f4">ELEGIBILIDAD:</div>
+                        <div class="node-body" id="node-body-f4">Análisis a texto completo de trabajos preseleccionados</div>
+                        <div class="node-metric" id="node-val-f4">(n = 310)</div>
+                    </div>
+                    <div class="connector-horizontal-group">
+                        <div class="line-h"></div>
+                        <div class="arrow-right"></div>
+                    </div>
+                    <div class="flow-node side-node" data-node="f5">
+                        <div class="node-header" id="node-title-f5">TRABAJOS EXCLUIDOS</div>
+                        <div class="node-body" id="node-body-f5">No cumplen criterios estrictos</div>
+                        <div class="node-metric" id="node-val-f5">(n = 265)</div>
+                    </div>
+                </div>
+
+                <div class="flow-connector vertical offset-left"><div class="arrow-down"></div></div>
+
+                <!-- NIVEL 4 -->
+                <div class="split-row final-row">
+                    <div class="flow-node main-node inclusion-node" data-node="f6">
+                        <div class="node-header" id="node-title-f6">INCLUSIÓN DEFINITIVA:</div>
+                        <div class="node-body" id="node-body-f6">Conformación del corpus bibliográfico</div>
+                        <div class="node-metric" id="node-val-f6">(n = 45)</div>
+                    </div>
+                    <div class="connector-dotted-group"><div class="line-dotted"></div></div>
+                    <div class="flow-node matrix-node" data-node="f7">
+                        <div class="node-header" id="node-title-f7">MATRIZ DE EXTRACCIÓN:</div>
+                        <div class="node-body" id="node-body-f7">Cuadro síntesis (autor, año, país, propósito, diseño, conclusiones sobre acople deglución-respiración y tácticas fonoaudiológicas)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="print-footer">
+                <span>Facultad de Ciencias de la Salud &bull; Carrera de Fonoaudiología</span>
+                <span>Documento Académico Oficial</span>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script principal con Firebase integrado -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
