@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     
-    <!-- SDKs de Firebase v10 (Versión Compat para garantizar compatibilidad total en GitHub Pages sin bloqueos de módulos) -->
+    <!-- SDKs globales de Firebase (Versión Compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
@@ -30,7 +30,7 @@
         <section class="control-panel no-print">
             <div class="panel-header">
                 <h2><span class="icon">&#9881;</span> Panel de Edición Integral del Flujograma</h2>
-                <p>Modifica los textos, subtítulos y cantidades ($n$).</p>
+                <p>Modifica los textos, subtítulos y cantidades ($n$). Todo se sincroniza en la nube.</p>
             </div>
 
             <div class="editor-grid">
@@ -184,7 +184,6 @@
         </main>
     </div>
 
-    <!-- Script principal estándar sin dependencias de módulos ES6 cruzados -->
     <script src="app.js"></script>
 </body>
 </html>
