@@ -1,6 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+// Configuración provista por Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyBbQ9PcShTYzAiGPOHIkAi6v7B2RSi8jVM",
     authDomain: "flujograma-8edd9.firebaseapp.com",
@@ -10,24 +8,25 @@ const firebaseConfig = {
     appId: "1:63514618848:web:29f8c2529a071efbf31985"
 };
 
-// Inicializar Firebase y Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// Inicializar Firebase usando la interfaz global compatible con static hosting
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-// Referencia al documento único del flujograma en la colección "tesis"
-const flowDocRef = doc(db, "flujogramas", "fonoaudiologia_principal");
+// Referencia directa al documento en Firestore
+const flowDocRef = db.collection("flujogramas").doc("fonoaudiologia_principal");
 
 document.addEventListener('DOMContentLoaded', async () => {
     const keys = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7'];
     const btnGenerate = document.getElementById('btn-generate');
     const dbStatus = document.getElementById('db-status');
 
-    let isRemoteUpdating = false;
-
-    // 1. Cargar datos iniciales desde la Base de Datos al abrir la app
+    // 1. Carga inicial desde Firestore de forma síncrona/asíncrona directa
     try {
-        const docSnap = await getDoc(flowDocRef);
-        if (docSnap.exists()) {
+        dbStatus.textContent = "Conectando a Cloud Firestore...";
+        dbStatus.className = "db-status syncing";
+
+        const docSnap = await flowDocRef.get();
+        if (docSnap.exists) {
             const data = docSnap.data();
             keys.forEach(key => {
                 if (data[key]) {
@@ -36,19 +35,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (document.getElementById(`edit-val-${key}`)) document.getElementById(`edit-val-${key}`).value = data[key].val || '';
                 }
             });
-            dbStatus.textContent = "Sincronizado con la Base de Datos";
+            dbStatus.textContent = "Base de datos sincronizada";
             dbStatus.className = "db-status synced";
         } else {
-            // Si no existe, creamos el documento inicial con los valores por defecto
             await saveToDatabase();
         }
     } catch (error) {
-        console.error("Error al cargar de Firestore:", error);
-        dbStatus.textContent = "Modo Offline / Error de conexión";
+        console.error("Error al conectar con Firestore:", error);
+        dbStatus.textContent = "Error de conexión con la Base de Datos";
         dbStatus.className = "db-status error";
     }
 
-    // Actualiza la vista visual del diagrama en pantalla
     function updateVisualFlowchart() {
         keys.forEach(key => {
             const inputTitle = document.getElementById(`edit-title-${key}`);
@@ -69,10 +66,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 2. Función de Guardado optimizada con estructura de datos consolidada
+    // 2. Función de guardado estricto en Firestore
     async function saveToDatabase() {
-        if (isRemoteUpdating) return;
-        dbStatus.textContent = "Guardando cambios...";
+        dbStatus.textContent = "Guardando en Firestore...";
         dbStatus.className = "db-status syncing";
 
         const payload = {};
@@ -85,32 +81,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         try {
-            await setDoc(flowDocRef, payload, { merge: true });
-            dbStatus.textContent = "Sincronizado con la Base de Datos";
+            await flowDocRef.set(payload, { merge: true });
+            dbStatus.textContent = "Base de datos sincronizada";
             dbStatus.className = "db-status synced";
         } catch (error) {
             console.error("Error al guardar en Firestore:", error);
-            dbStatus.textContent = "Error al sincronizar cambios";
+            dbStatus.textContent = "Error al actualizar base de datos";
             dbStatus.className = "db-status error";
         }
     }
 
-    // 3. Sistema de "Debounce" (Evita que la app se trabe al registrar datos externos o tipeo rápido)
     let saveTimeout = null;
     function handleInputChanges() {
         updateVisualFlowchart();
-        
-        dbStatus.textContent = "Escribiendo...";
+        dbStatus.textContent = "Cambios pendientes...";
         dbStatus.className = "db-status syncing";
 
         clearTimeout(saveTimeout);
-        // Espera 800ms de inactividad antes de escribir en la base de datos para prevenir congestión o bloqueos de red
         saveTimeout = setTimeout(() => {
             saveToDatabase();
-        }, 800);
+        }, 600);
     }
 
-    // Vincular eventos a todos los inputs
     keys.forEach(key => {
         ['title', 'body', 'val'].forEach(type => {
             const el = document.getElementById(`edit-${type}-${key}`);
@@ -120,10 +112,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Renderizar estado visual inicial
     updateVisualFlowchart();
 
-    // Botón de Impresión / Generar PDF
     btnGenerate.addEventListener('click', () => {
         updateVisualFlowchart();
         btnGenerate.style.transform = 'scale(0.98)';
